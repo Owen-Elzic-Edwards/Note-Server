@@ -62,9 +62,10 @@ var handleNoteSave = function() {
   };
 
   saveNote(newNote).then(function(data) {
-    getAndRenderNotes();
-    renderActiveNote();
+    console.log('saved!')
   });
+  getAndRenderNotes();
+  renderActiveNote();
 };
 
 // Delete the clicked note
@@ -82,9 +83,9 @@ var handleNoteDelete = function(event) {
   }
 
   deleteNote(note.id).then(function() {
-    getAndRenderNotes();
-    renderActiveNote();
   });
+  getAndRenderNotes();
+  renderActiveNote();
 };
 
 // Sets the activeNote and displays it

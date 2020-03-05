@@ -37,12 +37,14 @@ app.post("/api/notes", function(req, res) {
     console.log(data);
     notes.push(data);
     fs.writeFile('db/db.json', JSON.stringify(notes, null, 2), () => {
-        return notes;
+        return;
     });
 });
 
 app.delete("/api/notes/:id", function(req, res) {
     console.log('delete notes here');
+    const toDelete = req.params.id
+    console.log(toDelete);
     return res;
 });
 
