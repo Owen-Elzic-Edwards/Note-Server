@@ -10,31 +10,31 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/", function(req, res) {
-    console.log('home')
+    // console.log('home')
     res.sendFile(path.join(__dirname, "public/index.html"))
 });
 
 app.get("/notes", function(req, res) {
-    console.log('notes');
+    // console.log('notes');
     res.sendFile(path.join(__dirname, "public/notes.html"))
 });
 
 app.get("/api/notes", function(req, res) {
-    console.log('get notes here');
+    // console.log('get notes here');
     let raw = fs.readFileSync('db/db.json', 'utf8');
     let notes = JSON.parse(raw);
-    console.log(notes);
+    // console.log(notes);
     return res.json(notes)
 });
 
 app.post("/api/notes", function(req, res) {
-    console.log('post notes here');
+    // console.log('post notes here');
     let data = req.body;
     let raw = fs.readFileSync('db/db.json', 'utf8');
     let notes = JSON.parse(raw);
     data.id = (parseInt(notes[(notes.length -1)].id) + 1).toString();
      
-    console.log(data);
+    // console.log(data);
     notes.push(data);
     fs.writeFile('db/db.json', JSON.stringify(notes, null, 2), () => {
         return;
@@ -42,13 +42,13 @@ app.post("/api/notes", function(req, res) {
 });
 
 app.delete("/api/notes/:id", function(req, res) {
-    console.log('delete notes here');
+    // console.log('delete notes here');
     const toDelete = req.params.id
-    console.log(typeof toDelete);
+    // console.log(typeof toDelete);
     let raw = fs.readFileSync('db/db.json', 'utf8');
     let notes = JSON.parse(raw);
     for(const note in notes){
-        console.log(notes[note]);
+        // console.log(notes[note]);
         if(notes[note].id === toDelete){
             notes.splice(note, 1);
         }
