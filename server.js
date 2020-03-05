@@ -44,8 +44,18 @@ app.post("/api/notes", function(req, res) {
 app.delete("/api/notes/:id", function(req, res) {
     console.log('delete notes here');
     const toDelete = req.params.id
-    console.log(toDelete);
-    return res;
+    console.log(typeof toDelete);
+    let raw = fs.readFileSync('db/db.json', 'utf8');
+    let notes = JSON.parse(raw);
+    for(const note in notes){
+        console.log(notes[note]);
+        if(notes[note].id === toDelete){
+            notes.splice(note, 1);
+        }
+    }
+    fs.writeFile('db/db.json', JSON.stringify(notes, null, 2), () => {
+        return;
+    });
 });
 
 app.listen(PORT, () => {
