@@ -7,41 +7,45 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("public"));
 
 app.get("/", function(req, res) {
-    console.log('oi!')
+    console.log('home')
     res.sendFile(path.join(__dirname, "public/index.html"))
 });
 
 app.get("/notes", function(req, res) {
-    console.log('hello?');
+    console.log('notes');
     res.sendFile(path.join(__dirname, "public/notes.html"))
+});
+
+app.get("/api/notes", function(req, res) {
+    console.log('get notes here');
+    let raw = fs.readFileSync('db/db.json', 'utf8');
+    let notes = JSON.parse(raw);
+    console.log(notes);
+    return res.json(notes)
+});
+
+app.post("/api/notes", function(req, res) {
+    console.log('post notes here');
+    let data = req.body;
+    let raw = fs.readFileSync('db/db.json', 'utf8');
+    let notes = JSON.parse(raw);
+    data.id = (parseInt(notes[(notes.length -1)].id) + 1).toString();
+     
+    console.log(data);
+    notes.push(data);
+    fs.writeFile('db/db.json', JSON.stringify(notes, null, 2), () => {
+        return notes;
+    });
+});
+
+app.delete("/api/notes/:id", function(req, res) {
+    console.log('delete notes here');
+    return res;
 });
 
 app.listen(PORT, () => {
     console.log("server listening on localhost:" + PORT)
 });
-
-app.get("/api/notes", function(req, res) {
-    console.log('hey there');
-    return res.json(path.join(__dirname, "db/db.json"));
-});
-
-app.post("/api/notes", function(req, res) {
-    console.log('WRYYYYYY');
-    return res.json(path.join(__dirname, "db/db.json"));
-});
-
-// app.get("/api/notes/:id", (req, res) => {
-//     let chosen = req.params.id;
-//     let notes = fs.readFile(path.join(__dirname, 'db/db.json'));
-
-//     for(const note in notes) {
-//         if(chosen === note.id) {
-//             return res.json(note);
-//         }
-//     };
-
-//     return res.json(false);
-// });
-
